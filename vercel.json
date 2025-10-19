@@ -1,0 +1,7 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
+  "env": {
+    "SUPABASE_DATABASE_URL": "@supabase_database_url"
+  }
+}

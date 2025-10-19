@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from 'react';
+import { Suspense, useEffect, useState, useCallback } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { useJobStatus } from '@/context/JobStatusContext';
@@ -9,7 +9,7 @@ import Card from '@/components/ui/Card';
 import { searchAnalyses, getAnalysisStatus } from '@/services/analysis.service';
 import { Loader, RefreshCw, Search } from 'lucide-react';
 
-export default function ReportsPage() {
+function ReportsContent() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -202,9 +202,6 @@ export default function ReportsPage() {
   const paginatedAnalyses = filteredAnalyses.slice(startIndex, endIndex);
 
   return (
-    <div className="relative w-full min-h-screen bg-[#f3f2f1]">
-      <LeftSidebar />
-      
       <main className="ml-16 p-6">
         <div className="max-w-7xl mx-auto space-y-6">
           {/* Header */}
@@ -475,6 +472,20 @@ export default function ReportsPage() {
           </div>
         </div>
       </main>
+  );
+}
+
+export default function ReportsPage() {
+  return (
+    <div className="relative w-full min-h-screen bg-[#f3f2f1]">
+      <LeftSidebar />
+      <Suspense fallback={
+        <div className="relative w-full h-screen flex items-center justify-center">
+          <Loader size={48} className="text-[#0078d4] animate-spin" />
+        </div>
+      }>
+        <ReportsContent />
+      </Suspense>
     </div>
   );
 }
